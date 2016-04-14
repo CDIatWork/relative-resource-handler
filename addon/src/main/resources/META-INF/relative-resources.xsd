@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2011-2012, Jakob Korherr
+
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://code.google.com/a/apache-extras.org/p/relative-resource-handler"
+            xmlns:r="http://code.google.com/a/apache-extras.org/p/relative-resource-handler"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:element name="relative-resources">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="url-version" minOccurs="0" maxOccurs="1" default="1.0.0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:normalizedString">
+                            <xsd:pattern value="[^\s/]+" /> <!-- no whitespaces or '/' -->
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="gzip-enabled" minOccurs="0" maxOccurs="1" type="xsd:boolean" default="true" />
+                <xsd:element name="locale-support-enabled" minOccurs="0" maxOccurs="1" type="xsd:boolean" default="true" />
+                <xsd:element name="libraries" minOccurs="0" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="library" type="r:Library" minOccurs="1" maxOccurs="unbounded" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="Library">
+        <xsd:all>
+            <xsd:element name="location" type="r:Location" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="el-evaluation" type="r:ElEvaluation" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="project-stage" type="xsd:string" use="optional">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Development" />
+                    <xsd:enumeration value="Production" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Location">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="type" use="required">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="classpath" />
+                            <xsd:enumeration value="webapp" />
+                            <xsd:enumeration value="external" />
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="ElEvaluation">
+        <xsd:sequence>
+            <xsd:element name="file-mask" minOccurs="1" maxOccurs="unbounded" type="xsd:string" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

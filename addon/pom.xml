@@ -27,7 +27,7 @@
     <artifactId>relative-resource-handler</artifactId>
 
     <name>Apache Extras - Relative-Resource-Handler</name>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
 
     <repositories>
         <repository>

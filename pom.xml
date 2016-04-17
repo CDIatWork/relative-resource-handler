@@ -28,7 +28,7 @@
     <artifactId>relative-resource-handler-project</artifactId>
 
     <name>Apache Extras - Relative-Resource-Handler Project</name>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
 
     <modules>
         <module>addon</module>

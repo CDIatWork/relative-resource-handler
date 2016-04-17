@@ -23,8 +23,11 @@ package org.apacheextras.myfaces.resourcehandler.config;
 import org.apacheextras.myfaces.resourcehandler.ResourceUtils;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Config for the relative resource handler.
@@ -43,6 +46,9 @@ public class RelativeResourceHandlerConfig implements Serializable
     private Boolean gzipEnabled;
     private Boolean localeSupportEnabled;
 
+    //workaround for embedded containers on win (upper- vs. lower-case drive-letters)
+    private Set<String> parsedPaths;
+
     /**
      * Creates and fills the config (with the help of the related parser).
      */
@@ -51,6 +57,7 @@ public class RelativeResourceHandlerConfig implements Serializable
         // use concurrent hash map to avoid concurrency problems
         // NOTE that multiple threads may simultaneously serve/create resources
         libraries = new ConcurrentHashMap<String, Library>();
+        parsedPaths = new CopyOnWriteArraySet<String>();
     }
 
     /**
@@ -190,5 +197,15 @@ public class RelativeResourceHandlerConfig implements Serializable
             throw new IllegalArgumentException("localeSupportEnabled has already been set to a different value.");
         }
         this.localeSupportEnabled = localeSupportEnabled;
+    }
+
+    public boolean isParsedAlready(URL url)
+    {
+        return this.parsedPaths.contains(url.toExternalForm().toLowerCase());
+    }
+
+    public void addParsedLocation(URL url)
+    {
+        this.parsedPaths.add(url.toExternalForm().toLowerCase());
     }
 }

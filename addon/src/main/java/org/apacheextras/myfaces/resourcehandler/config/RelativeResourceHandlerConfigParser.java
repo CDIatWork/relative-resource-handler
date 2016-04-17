@@ -90,6 +90,13 @@ public class RelativeResourceHandlerConfigParser
     public void parseUrl(URL url, RelativeResourceHandlerConfig config)
             throws IOException, XMLStreamException
     {
+        if (config.isParsedAlready(url))
+        {
+            return;
+        }
+
+        config.addParsedLocation(url);
+
         // validate config file via XML schema
         if (shouldValidateSchema())
         {
